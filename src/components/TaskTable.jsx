@@ -2,6 +2,7 @@ import DATA from "../data"
 import {createColumnHelper,flexRender,getCoreRowModel,useReactTable,} from "@tanstack/react-table";
 import { useState } from "react";
 import EditableCell from "./EditableCell";
+import statusCell from "./statusCell";
 
 const columnHelper = createColumnHelper()
 
@@ -15,7 +16,7 @@ const columns = [
   }),
   columnHelper.accessor((row) => row.status, {
     id: "status",
-    cell: (info) => <p>{info.getValue()?.name}</p>,
+    cell: statusCell,
     header: () => <span>Status</span>,
     enableResizing: true,
   }),
