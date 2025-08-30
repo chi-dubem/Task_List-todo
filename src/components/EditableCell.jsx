@@ -13,7 +13,7 @@ const EditableCell = ({getValue, row, column, table}) => {
     },[initialValue])
 
   return <input
-   className="w-85% overflow-hidden text-over truncate whitespace-nowrap" 
+   className="w-full overflow-hidden text-over truncate whitespace-nowrap" 
    value={value}
    onBlur={onBlur}
    type='text'

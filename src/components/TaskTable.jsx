@@ -3,6 +3,7 @@ import {createColumnHelper,flexRender,getCoreRowModel,useReactTable,} from "@tan
 import { useState } from "react";
 import EditableCell from "./EditableCell";
 import statusCell from "./statusCell";
+import DateCell from "./DateCell";
 
 const columnHelper = createColumnHelper()
 
@@ -22,13 +23,13 @@ const columns = [
   }),
   columnHelper.accessor((row) => row.due, {
     id: "due",
-    cell: (info) => <p>{info.getValue()?.toLocaleTimeString()}</p>,
+    cell: DateCell,
     header: () => <span>Due</span>,
     enableResizing: true,
   }),
   columnHelper.accessor((row) => row.notes, {
     id: "notes",
-    cell: (info) => <p>{info.getValue()}</p>,
+    cell: EditableCell,
     header: () => <span>Notes</span>,
     enableResizing: true,
   }),
@@ -58,7 +59,7 @@ export default function TaskTable() {
     });
     console.log(table.getHeaderGroups)
     return (
-      <div className="p-2">
+      <div className="p-2 border border-gray-400 h-200 overflow-auto ">
         <table className="border border-gray-400 border-collapse">
           <thead>
             {table.getHeaderGroups().map((headerGroup) => (
@@ -89,7 +90,7 @@ export default function TaskTable() {
           </thead>
           <tbody className="">
             {table.getRowModel().rows.map((row) => (
-              <tr key={row.id} >
+              <tr key={row.id}>
                 {row.getVisibleCells().map((cell) => (
                   <td
                     className=" border border-gray-400 px-4 py-2"
