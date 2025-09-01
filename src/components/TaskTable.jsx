@@ -1,9 +1,10 @@
 import DATA from "../data"
-import {createColumnHelper,flexRender,getCoreRowModel,useReactTable,} from "@tanstack/react-table";
+import {createColumnHelper,flexRender,getCoreRowModel,useReactTable, getFilteredRowModel} from "@tanstack/react-table";
 import { useState } from "react";
 import EditableCell from "./EditableCell";
 import statusCell from "./statusCell";
 import DateCell from "./DateCell";
+import Filters from "./Filters";
 
 const columnHelper = createColumnHelper()
 
@@ -38,28 +39,43 @@ const columns = [
 export default function TaskTable() {
 
     const [data, setData] = useState(DATA);
+    const [columnFilters, setColumnFilters] = useState([
+      {
+        
+      },
+    ]); 
     console.log(data)
 
     const table = useReactTable({
       data,
       columns,
+      state: {
+        columnFilters,
+      },
+      onColumnFiltersChange: setColumnFilters,
       getCoreRowModel: getCoreRowModel(),
+      getFilteredRowModel: getFilteredRowModel(),
       columnResizeMode: "onChange",
-      meta:{
-        updateData: (rowIndex, colomnId, value) => setData(
-            prev => prev.map(
-                (row,index) =>
-                    index === rowIndex ? {
-                        ...prev[rowIndex],
-                        [colomnId]: value,
-                    }: row
+      meta: {
+        updateData: (rowIndex, colomnId, value) =>
+          setData((prev) =>
+            prev.map((row, index) =>
+              index === rowIndex
+                ? {
+                    ...prev[rowIndex],
+                    [colomnId]: value,
+                  }
+                : row
             )
-        )
-      }
+          ),
+      },
     });
     console.log(table.getHeaderGroups)
     return (
-      <div className="p-2 border border-gray-400 h-200 overflow-auto ">
+
+      <div>
+        <Filters table={table} />
+        <div className="p-2 h-200 overflow-auto ">
         <table className="border border-gray-400 border-collapse">
           <thead>
             {table.getHeaderGroups().map((headerGroup) => (
@@ -106,5 +122,8 @@ export default function TaskTable() {
         </table>
         <div className="h-4" />
       </div>
+
+      </div>
+      
     );
 }
